@@ -45,12 +45,12 @@ while i < len(fileFormat):
         if nc == 'a':
             if audio.tag.artist == None:
                 newName += 'Unknown Artist'    
-            else
+            else:
                 newName += audio.tag.artist
         elif nc == 't':
             if audio.tag.title == None:
                 newName += 'Unknown Title'
-            else
+            else:
                 newName += audio.tag.title
         elif nc == 'b':
             if audio.tag.album == None:
@@ -60,12 +60,12 @@ while i < len(fileFormat):
         elif nc == 'c':
             if audio.tag.album == None:
                 newName += 'Unknown Album Artist'
-            else
+            else:
                 newName += audio.tag.album_artist
         elif nc == 'n':
             if audio.tag.track_name == None:
                 newName += ''            
-            else
+            else:
                 newName += audio.tag.track_num
     else:
         newName += c
