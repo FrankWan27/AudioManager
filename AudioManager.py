@@ -40,23 +40,37 @@ while i < len(fileFormat):
     i += 1
     if c == '%':
         i += 1
-        print('ncrement')
            
         #Fix this
         if nc == 'a':
-            newName += audio.tag.artist
+            if audio.tag.artist == None:
+                newName += 'Unknown Artist'    
+            else
+                newName += audio.tag.artist
         elif nc == 't':
-            newName += audio.tag.title
+            if audio.tag.title == None:
+                newName += 'Unknown Title'
+            else
+                newName += audio.tag.title
         elif nc == 'b':
-            newName += audio.tag.album
+            if audio.tag.album == None:
+                newName += 'Unknown Album'
+            else:
+                newName += audio.tag.album
         elif nc == 'c':
-            newName += audio.tag.album_artist
+            if audio.tag.album == None:
+                newName += 'Unknown Album Artist'
+            else
+                newName += audio.tag.album_artist
         elif nc == 'n':
-            newName += audio.tag.track_num
+            if audio.tag.track_name == None:
+                newName += ''            
+            else
+                newName += audio.tag.track_num
     else:
         newName += c
 
-print('\"' + fileName + '\"' + ' being renamed to \"' + newName + '\"')
+print('\"' + fileName + '\"' + ' being renamed to \"' + newName + '.mp3\"')
 #user confirm action
 #cont = input('Would you like to continue? (y/n) ')
 #if cont == 'y' or  cont == 'Y':
