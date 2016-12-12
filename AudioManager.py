@@ -72,6 +72,8 @@ while i < len(fileFormat):
 
 print('\"' + fileName + '\"' + ' being renamed to \"' + newName + '.mp3\"')
 #user confirm action
-#cont = input('Would you like to continue? (y/n) ')
-#if cont == 'y' or  cont == 'Y':
-audio.rename(newName)
+y = 'y'
+n = 'n'
+cont = input('Would you like to continue? (y/n) ')
+if cont == 'y' or  cont == 'Y':
+    audio.rename(newName)
