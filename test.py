@@ -1,4 +1,6 @@
-import subprocess
+import mutagen
 
-path = '~/Programming/AudioManager/music'
-subprocess.call(['./folder.sh', path])
+audio = mutagen.File('song.ogg')
+print(audio.tags.pprint())
+print(audio.mime)
+print(type(audio))

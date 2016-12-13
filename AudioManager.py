@@ -1,3 +1,5 @@
+ #!/usr/bin/python
+# -*- coding: utf-8 -*-
 import mutagen
 import argparse
 import sys
@@ -25,7 +27,10 @@ for i in range(len(fileFormat)-1):
 #check if %[char] exists
 formats = {'a':'Artist', 't':'Title', 'b':'Album', 'c':'Album Artist', 'n':'Track Number', 'y':'Year', 'g':'Genre'}
 mp3formats = {'a':'TPE1', 't':'TIT2', 'b':'TALB', 'c':'TPE2', 'n':'TRCK', 'y': 'TYER', 'g':'TCON'}
-#oggformats = {'a':
+aifformats = mp3formats
+oggformats = {'a':'ARTIST', 't':'TITLE', 'b':'ALBUM'}
+m4aformats = {'a':'©ART', 't':'©nam', 'b':'©alb', 'c':'©wrt', 'n':'trkn', 'y': '©day', 'g':'©gen'}
+
 for sub in subs:
     if sub not in formats:
         print('ERROR: %' + sub + ' is not recognized.')
@@ -33,18 +38,30 @@ for sub in subs:
 
 #rename file
 newName = ''
-
 i = 0
+
+#get correct audio format
+if str(type(audio)) == "<class 'mutagen.mp3.MP3'>":
+    audioformat = mp3formats
+elif str(type(audio)) == "<class 'mutagen.aiff.AIFF'>":
+    audioformat = aifformats
+elif str(type(audio)) == "<class 'mutagen.mp4.MP4'>":
+    audioformat = m4aformats
+elif str(type(audio)) == "<class 'mutagen.oggvorbis.OggVorbis'>":
+    audioformat = oggformats
+else:
+    print("Audio Format " + str(type(audio)) + " is unknown.")
+    exit(-1)
 while i < len(fileFormat):
     c = fileFormat[i:i+1]
     nc = fileFormat[i+1:i+2]
     i += 1
     if c == '%':
         i += 1
-        if mp3formats[nc] not in audio.tags:
+        if audioformat[nc] not in audio.tags:
             newName += 'Unknown ' + formats[nc]
         else:
-            newName += str(audio.tags[mp3formats[nc]])
+            newName += str(audio.tags[audioformat[nc]])
        
     else:
         newName += c
