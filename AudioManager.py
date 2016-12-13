@@ -14,7 +14,6 @@ fileFormat = args.format
 
 if args.file == '':
     fileName = raw_input('Please enter the audio file name: ')
-
 audio = mutagen.File(fileName)
 
 #look through format to check for %'s

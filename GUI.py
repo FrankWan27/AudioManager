@@ -1,4 +1,5 @@
 import Tkinter, tkFileDialog
+from Tool import renameFile
 class audioGUI(Tkinter.Tk):
     def __init__(self, parent):
         Tkinter.Tk.__init__(self, parent)
@@ -36,7 +37,7 @@ class audioGUI(Tkinter.Tk):
         self.grid_columnconfigure(1, weight=1, minsiz=800)
 
     def renameClick(self):
-        print('go lul')
+        renameFile(self.file.get(), self.format.get())
 
     def openDialog(self):
         filename = tkFileDialog.askopenfilename()
