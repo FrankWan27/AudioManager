@@ -1,4 +1,4 @@
-import eyed3
+import mutagen
 import argparse
 import sys
 
@@ -11,11 +11,10 @@ args = parser.parse_args()
 fileName = args.file
 fileFormat = args.format
 
-if len(sys.argv) == 1:
-    print('ERROR: Please enter a file name.')
-    exit(-1)
+if args.file == '':
+    fileName = raw_input('Please enter the audio file name: ')
 
-audio = eyed3.load(fileName)
+audio = mutagen.File(fileName)
 
 #look through format to check for %'s
 subs = []
@@ -24,15 +23,17 @@ for i in range(len(fileFormat)-1):
         subs.append(fileFormat[i+1:i+2])        
 
 #check if %[char] exists
-formats = {'a':'artist', 't':'title', 'b':'album', 'c':'album_artist', 'n':'track_num'}
+formats = {'a':'Artist', 't':'Title', 'b':'Album', 'c':'Album Artist', 'n':'Track Number', 'y':'Year', 'g':'Genre'}
+mp3formats = {'a':'TPE1', 't':'TIT2', 'b':'TALB', 'c':'TPE2', 'n':'TRCK', 'y': 'TYER', 'g':'TCON'}
+#oggformats = {'a':
 for sub in subs:
     if sub not in formats:
         print('ERROR: %' + sub + ' is not recognized.')
         exit(-1)
 
 #rename file
-newName = '';
-#for i in range(len(fileFormat)): <- can't increment i in for loop?
+newName = ''
+
 i = 0
 while i < len(fileFormat):
     c = fileFormat[i:i+1]
@@ -40,40 +41,16 @@ while i < len(fileFormat):
     i += 1
     if c == '%':
         i += 1
-           
-        #Fix this
-        if nc == 'a':
-            if audio.tag.artist == None:
-                newName += 'Unknown Artist'    
-            else:
-                newName += audio.tag.artist
-        elif nc == 't':
-            if audio.tag.title == None:
-                newName += 'Unknown Title'
-            else:
-                newName += audio.tag.title
-        elif nc == 'b':
-            if audio.tag.album == None:
-                newName += 'Unknown Album'
-            else:
-                newName += audio.tag.album
-        elif nc == 'c':
-            if audio.tag.album == None:
-                newName += 'Unknown Album Artist'
-            else:
-                newName += audio.tag.album_artist
-        elif nc == 'n':
-            if audio.tag.track_name == None:
-                newName += ''            
-            else:
-                newName += audio.tag.track_num
+        if mp3formats[nc] not in audio.tags:
+            newName += 'Unknown ' + formats[nc]
+        else:
+            newName += str(audio.tags[mp3formats[nc]])
+       
     else:
         newName += c
 
 print('\"' + fileName + '\"' + ' being renamed to \"' + newName + '.mp3\"')
 #user confirm action
-y = 'y'
-n = 'n'
-cont = input('Would you like to continue? (y/n) ')
+cont = raw_input('Would you like to continue? (y/n) ')
 if cont == 'y' or  cont == 'Y':
     audio.rename(newName)
