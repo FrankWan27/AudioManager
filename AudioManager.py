@@ -1,4 +1,4 @@
- #!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import mutagen
 import argparse
@@ -38,7 +38,6 @@ for sub in subs:
 
 #rename file
 newName = ''
-i = 0
 
 #get correct audio format
 if str(type(audio)) == "<class 'mutagen.mp3.MP3'>":
@@ -52,17 +51,22 @@ elif str(type(audio)) == "<class 'mutagen.oggvorbis.OggVorbis'>":
 else:
     print("Audio Format " + str(type(audio)) + " is unknown.")
     exit(-1)
+
+i = 0
 while i < len(fileFormat):
     c = fileFormat[i:i+1]
     nc = fileFormat[i+1:i+2]
     i += 1
     if c == '%':
         i += 1
+        
         if audioformat[nc] not in audio.tags:
             newName += 'Unknown ' + formats[nc]
+        elif audioformat == oggformats:
+            newName += str(audio.tags[audioformat[nc]][0])
         else:
             newName += str(audio.tags[audioformat[nc]])
-       
+        
     else:
         newName += c
 
