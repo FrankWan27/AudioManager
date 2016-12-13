@@ -1,75 +1,50 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-import mutagen
-import argparse
-import sys
-parser = argparse.ArgumentParser()
-parser.add_argument('--file', help='path to audio file', default='')
-parser.add_argument('--format', help='naming format of mp3 file', default='%a - %t')
+import Tkinter, tkFileDialog
+from Tool import renameFile
 
-args = parser.parse_args()
+class audioGUI(Tkinter.Tk):
+    def __init__(self, parent):
+        Tkinter.Tk.__init__(self, parent)
+        self.parent = parent
+        self.initialize()
 
-fileName = args.file
-fileFormat = args.format
-
-if args.file == '':
-    fileName = raw_input('Please enter the audio file name: ')
-audio = mutagen.File(fileName)
-
-#look through format to check for %'s
-subs = []
-for i in range(len(fileFormat)-1):
-    if fileFormat[i:i+1] == '%':
-        subs.append(fileFormat[i+1:i+2])        
-
-#check if %[char] exists
-formats = {'a':'Artist', 't':'Title', 'b':'Album', 'c':'Album Artist', 'n':'Track Number', 'y':'Year', 'g':'Genre'}
-mp3formats = {'a':'TPE1', 't':'TIT2', 'b':'TALB', 'c':'TPE2', 'n':'TRCK', 'y': 'TYER', 'g':'TCON'}
-aifformats = mp3formats
-oggformats = {'a':'ARTIST', 't':'TITLE', 'b':'ALBUM'}
-m4aformats = {'a':'©ART', 't':'©nam', 'b':'©alb', 'c':'©wrt', 'n':'trkn', 'y': '©day', 'g':'©gen'}
-
-for sub in subs:
-    if sub not in formats:
-        print('ERROR: %' + sub + ' is not recognized.')
-        exit(-1)
-
-#rename file
-newName = ''
-
-#get correct audio format
-if str(type(audio)) == "<class 'mutagen.mp3.MP3'>":
-    audioformat = mp3formats
-elif str(type(audio)) == "<class 'mutagen.aiff.AIFF'>":
-    audioformat = aifformats
-elif str(type(audio)) == "<class 'mutagen.mp4.MP4'>":
-    audioformat = m4aformats
-elif str(type(audio)) == "<class 'mutagen.oggvorbis.OggVorbis'>":
-    audioformat = oggformats
-else:
-    print("Audio Format " + str(type(audio)) + " is unknown.")
-    exit(-1)
-
-i = 0
-while i < len(fileFormat):
-    c = fileFormat[i:i+1]
-    nc = fileFormat[i+1:i+2]
-    i += 1
-    if c == '%':
-        i += 1
+    def initialize(self):
+        self.grid()
         
-        if audioformat[nc] not in audio.tags:
-            newName += 'Unknown ' + formats[nc]
-        elif audioformat == oggformats:
-            newName += str(audio.tags[audioformat[nc]][0])
-        else:
-            newName += str(audio.tags[audioformat[nc]])
+        self.file = Tkinter.StringVar()
         
-    else:
-        newName += c
+        self.fileEntry = Tkinter.Entry(self, textvariable=self.file)
+        self.fileEntry.grid(column=1, row=0, sticky='EW')
+        
+        fileLabel = Tkinter.Label(self, text='File Path:')
+        fileLabel.grid(column=0, row=0, sticky='EW')
+       
+        self.fileDialog = Tkinter.Button(self, text='Browse...', command=self.openDialog)
+        self.fileDialog.grid(column=2, row=0, sticky='W')
+        
+        self.format = Tkinter.StringVar()
+        self.format.set('%a - %t')
+        
+        self.formatEntry = Tkinter.Entry(self, textvariable=self.format)
+        self.formatEntry.grid(column=1, row=1, sticky='EW')
+        
+        formatLabel = Tkinter.Label(self, text='Format: ')
+        formatLabel.grid(column=0, row=1, sticky='EW')
+        
+        renameButton = Tkinter.Button(self, text='Rename', command=self.renameClick)
+        renameButton.grid(column=1, row=2, sticky='W')
 
-print('\"' + fileName + '\"' + ' being renamed to \"' + newName + '.mp3\"')
-#user confirm action
-cont = raw_input('Would you like to continue? (y/n) ')
-if cont == 'y' or  cont == 'Y':
-    audio.rename(newName)
+
+        self.grid_rowconfigure(1, pad=5)  
+        self.grid_columnconfigure(1, weight=1, minsiz=800)
+
+    def renameClick(self):
+        renameFile(self.file.get(), self.format.get())
+
+    def openDialog(self):
+        filename = tkFileDialog.askopenfilename()
+        self.file.set(filename)
+
+if __name__ == "__main__":
+    app = audioGUI(None)
+    app.title('AudioManager')
+    app.mainloop()

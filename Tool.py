@@ -1,8 +1,9 @@
 import mutagen
 import os
-def renameFile(fileName, fileFormat):
+
+def renameFile(filePath, fileFormat):
     
-    audio = mutagen.File(fileName)
+    audio = mutagen.File(filePath)
     #look through format to check for %'s
     subs = []
     for i in range(len(fileFormat)-1):
@@ -18,8 +19,8 @@ def renameFile(fileName, fileFormat):
     for sub in subs:
         if sub not in formats:
             print('ERROR: %' + sub + ' is not recognized.')
-            exit(-1)
-
+            return;
+    
     #rename file
     newName = ''
 
@@ -32,8 +33,9 @@ def renameFile(fileName, fileFormat):
         audioformat = oggformats
     else:
         print("Audio Format " + str(type(audio)) + " is unknown.")
-        exit(-1)
+        return;
 
+    #go through format, replacing % with tags     
     i = 0
     while i < len(fileFormat):
         c = fileFormat[i:i+1]
@@ -51,11 +53,12 @@ def renameFile(fileName, fileFormat):
             
         else:
             newName += c
-
-    ext = os.path.splitext(fileName)[1]
-    print('\"' + fileName + '\"' + ' being renamed to \"' + newName + ext + '\"')
-    #user confirm action
-    cont = raw_input('Would you like to continue? (y/n) ')
-    if cont == 'y' or  cont == 'Y':
-        os.rename(fileName, newName + ext)
+    
+    ext = os.path.splitext(filePath)[1]
+    newName += ext
+    path, fileName = os.path.split(filePath)
+    
+    print('\"' + fileName + '\"' + ' being renamed to \"' + newName + '\"')
+    
+    os.rename(filePath, os.path.join(path, newName))
 
