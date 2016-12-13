@@ -3,7 +3,6 @@
 import mutagen
 import argparse
 import sys
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--file', help='path to audio file', default='')
 parser.add_argument('--format', help='naming format of mp3 file', default='%a - %t')
