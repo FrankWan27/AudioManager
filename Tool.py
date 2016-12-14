@@ -62,3 +62,7 @@ def renameFile(filePath, fileFormat):
     
     os.rename(filePath, os.path.join(path, newName))
 
+def renameFolder(folderPath, fileFormat):
+
+    for file in os.listdir(folderPath):
+        renameFile(os.path.join(folderPath, file), fileFormat)
