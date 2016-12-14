@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['AudioManager.py'],
-             pathex=['/home/franky/Programming/AudioManager'],
+             pathex=['Z:\\home\\franky\\Programming\\AudioManager'],
              binaries=None,
              datas=None,
              hiddenimports=[],

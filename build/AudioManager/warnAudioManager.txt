@@ -6,8 +6,7 @@ missing module named _subprocess.CREATE_NEW_CONSOLE - imported by _subprocess, s
 missing module named _subprocess.STD_ERROR_HANDLE - imported by _subprocess, subprocess
 missing module named _subprocess.STARTF_USESTDHANDLES - imported by _subprocess, subprocess
 missing module named _subprocess.SW_HIDE - imported by _subprocess, subprocess
-missing module named collections.namedtuple - imported by collections, inspect, unittest.util, difflib, doctest, mutagen._util
-missing module named collections.MutableSequence - imported by collections, mutagen.apev2
+missing module named collections.namedtuple - imported by collections, inspect, unittest.util, difflib, doctest
 missing module named cPickle.loads - imported by cPickle, collections
 missing module named cPickle.dumps - imported by cPickle, collections
 missing module named thread.get_ident - imported by thread, collections
@@ -19,7 +18,7 @@ missing module named itertools.chain - imported by itertools, tokenize, heapq, c
 missing module named itertools.starmap - imported by itertools, collections
 missing module named itertools.repeat - imported by itertools, collections
 missing module named itertools.tee - imported by itertools, heapq
-missing module named itertools.izip - imported by itertools, heapq, mutagen._compat
+missing module named itertools.izip - imported by itertools, heapq
 missing module named itertools.count - imported by itertools, heapq, threading
 missing module named itertools.islice - imported by itertools, repr, heapq
 missing module named collections.deque - imported by collections, shlex, threading
@@ -34,8 +33,8 @@ missing module named _weakref.ReferenceType - imported by _weakref, weakref
 missing module named _weakref.proxy - imported by _weakref, weakref
 missing module named _weakref.getweakrefs - imported by _weakref, weakref
 missing module named _weakref.getweakrefcount - imported by _weakref, weakref
-missing module named _weakref.CallableProxyType - imported by _weakref, weakref
 missing module named _weakref.ProxyType - imported by _weakref, weakref
+missing module named _weakref.CallableProxyType - imported by _weakref, weakref
 missing module named time.time - imported by time, threading
 missing module named time.sleep - imported by time, threading
 missing module named datetime.date - imported by datetime, _strptime
@@ -74,8 +73,9 @@ missing module named _io.StringIO - imported by _io, io
 missing module named _io.BufferedRWPair - imported by _io, io
 missing module named _io.TextIOWrapper - imported by _io, io
 missing module named _io.UnsupportedOperation - imported by _io, io
+missing module named readline - imported by cmd, pdb
 missing module named errno.EINVAL - imported by errno, StringIO
-missing module named cStringIO.StringIO - imported by cStringIO, gettext, pprint, shlex, tempfile, pickle, mutagen._compat, encodings.uu_codec, quopri, encodings.quopri_codec
+missing module named cStringIO.StringIO - imported by cStringIO, gettext, pprint, shlex, tempfile, pickle, encodings.uu_codec, quopri, encodings.quopri_codec
 missing module named binascii.b2a_qp - imported by binascii, quopri
 missing module named binascii.a2b_qp - imported by binascii, quopri
 missing module named binascii.a2b_uu - imported by binascii, encodings.uu_codec
@@ -85,14 +85,10 @@ missing module named 'org.python' - imported by pickle
 missing module named _sre.MAXREPEAT - imported by _sre, sre_constants
 missing module named re._compile - imported by re, sre
 missing module named re.__all__ - imported by re, sre
-missing module named struct.pack - imported by struct, mutagen.id3._specs, mutagen.aiff
-missing module named struct.unpack - imported by struct, mutagen.id3._frames, mutagen.id3._specs, mutagen.id3._id3v1
-missing module named struct.error - imported by struct, mutagen._util, mutagen.id3._id3v1
 missing module named struct.calcsize - imported by struct, ctypes
 missing module named _struct.__doc__ - imported by _struct, struct
 missing module named _struct._clearcache - imported by _struct, struct
-missing module named _subprocess - imported by subprocess
-missing module named msvcrt - imported by subprocess
+missing module named fcntl - imported by tempfile, subprocess
 missing module named threading.RLock - imported by threading, _threading_local
 missing module named threading.current_thread - imported by threading, _threading_local
 missing module named os.urandom - imported by os, random
@@ -115,19 +111,14 @@ missing module named os2 - imported by os
 missing module named nt._isdir - imported by nt, ntpath
 missing module named nt._getfullpathname - imported by nt, ntpath
 missing module named nt._exit - imported by nt, os
-missing module named nt - imported by os, ntpath
+missing module named pwd - imported by posixpath
 missing module named posix._exit - imported by posix, os
+missing module named posix - imported by os
+missing module named resource - imported by posix
 missing module named codecs.mbcs_encode - imported by codecs, encodings.mbcs
 missing module named codecs.mbcs_decode - imported by codecs, encodings.mbcs
 missing module named unicodedata.ucd_3_2_0 - imported by unicodedata, stringprep, encodings.idna
-missing module named mutagen._file.FileType - imported by mutagen._file, mutagen.aac, mutagen.smf, mutagen
-missing module named mutagen.id3._tags.ID3Tags - imported by mutagen.id3._tags, mutagen.id3._specs, mutagen.id3._file, mutagen.id3
-missing module named mutagen.MutagenError - imported by mutagen, mutagen.smf
-missing module named mutagen.PaddingInfo - imported by mutagen, mutagen.mp4
-missing module named mutagen.Metadata - imported by mutagen, mutagen.apev2, mutagen.easyid3
-missing module named mutagen.Tags - imported by mutagen, mutagen.asf, mutagen.easymp4, mutagen.mp4
-missing module named mutagen.StreamInfo - imported by mutagen, mutagen.asf, mutagen.apev2, mutagen.mp3, mutagen.oggflac, mutagen.oggspeex, mutagen.oggtheora, mutagen.oggvorbis, mutagen.oggopus, mutagen.trueaudio, mutagen.wavpack, mutagen.mp4, mutagen.aac, mutagen.musepack, mutagen.monkeysaudio, mutagen.optimfrog, mutagen.aiff, mutagen.smf
-missing module named mutagen.FileType - imported by mutagen, mutagen.asf, mutagen.apev2, mutagen.ogg, mutagen.mp4, mutagen.aiff
+missing module named mutagen - imported by Tool
 missing module named _ctypes._wstring_at_addr - imported by _ctypes, ctypes
 missing module named _ctypes._string_at_addr - imported by _ctypes, ctypes
 missing module named _ctypes._cast_addr - imported by _ctypes, ctypes
@@ -139,7 +130,6 @@ missing module named _ctypes._check_HRESULT - imported by _ctypes, ctypes
 missing module named _ctypes.set_conversion_mode - imported by _ctypes, ctypes
 missing module named _ctypes._pointer_type_cache - imported by _ctypes, ctypes
 missing module named _ctypes.POINTER - imported by _ctypes, ctypes
-missing module named _ctypes.pointer - imported by _ctypes, ctypes
 missing module named _ctypes._SimpleCData - imported by _ctypes, ctypes
 missing module named _ctypes.get_errno - imported by _ctypes, ctypes
 missing module named _ctypes.set_errno - imported by _ctypes, ctypes
