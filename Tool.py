@@ -79,6 +79,7 @@ def editTag(filePath, fileFormat, rows):
         audio = mutagen.File(filePath)
     else:
         print('Audio Format ' + ext + ' is currently unsupported :(')
+        return
 
     #look through format to check for %'s
     subs = []
@@ -97,3 +98,8 @@ def editTag(filePath, fileFormat, rows):
     
     print(audio.pprint())
     audio.save()
+
+def editTagFolder(folderPath, fileFormat, rows):
+
+    for file in os.listdir(folderPath):
+        editTag(os.path.join(folderPath, file), fileFormat)

@@ -16,11 +16,11 @@ class audioGUI(Tkinter.Tk):
         page1 = ttk.Frame(nb)
         page2 = ttk.Frame(nb)
         self.page3 = ttk.Frame(nb)
-        page4 = ttk.Frame(nb)
+        self.page4 = ttk.Frame(nb)
         nb.add(page1, text='File Rename')
         nb.add(page2, text='Folder Rename')
         nb.add(self.page3, text='File Tag Edit')
-        nb.add(page4, text='Folder Tag Edit')
+        nb.add(self.page4, text='Folder Tag Edit')
         nb.grid(column=0, row=0, stick='EW')
         
         #Variables to store
@@ -57,31 +57,62 @@ class audioGUI(Tkinter.Tk):
 
         #FILE TAG EDIT
 
-        fileLabel3 = Tkinter.Label(self.page3, text='File Path:').grid(column=0, row=0, sticky='EW')
+        Tkinter.Label(self.page3, text='File Path:').grid(column=0, row=0, sticky='EW')
 
-        fileEntry3 = Tkinter.Entry(self.page3, textvariable=self.file).grid(column=1, row=0, sticky='EW')
+        Tkinter.Entry(self.page3, textvariable=self.file).grid(column=1, row=0, sticky='EW')
        
-        fileDialog3 = Tkinter.Button(self.page3, text='Browse...', command=self.openFileDialog, width=7).grid(column=2, row=0, sticky='W')
+        Tkinter.Button(self.page3, text='Browse...', command=self.openFileDialog, width=7).grid(column=2, row=0, sticky='W')
         
-        formatLabel = Tkinter.Label(self.page3, text='Format:').grid(column=0, row=1, sticky='EW')
+        Tkinter.Label(self.page3, text='Format:').grid(column=0, row=1, sticky='EW')
         
-        formatEntry = Tkinter.Entry(self.page3, textvariable=self.format).grid(column=1, row=1, sticky='EW')
+        Tkinter.Entry(self.page3, textvariable=self.format).grid(column=1, row=1, sticky='EW')
 
-        self.tagNum = 0
-        self.metadata = ['Title', 'Artist', 'Album', 'Album Artist', 'Genre']
-        self.data = []
+        self.tagNum = []
+        self.metadata = []
         self.rows = []
-        self.selectedTag = Tkinter.StringVar()
-        self.selectedTag.set(self.metadata[0])
-        self.tagMenu = apply(Tkinter.OptionMenu, (self.page3, self.selectedTag) + tuple(self.metadata))
-        self.tagMenu.grid(column=0, row=self.tagNum + 2, sticky='EW')
+        self.tagNum.append(0)
+        self.metadata.append(['Title', 'Artist', 'Album', 'Album Artist', 'Genre'])
+        self.rows.append([])
+        self.selectedTag = []
+        self.selectedTag.append(Tkinter.StringVar())
+        self.selectedTag[0].set(self.metadata[0][0])
+        self.tagMenu = []
+        self.tagMenu.append(apply(Tkinter.OptionMenu, (self.page3, self.selectedTag[0]) + tuple(self.metadata[0])))
+        self.tagMenu[0].grid(column=0, row=self.tagNum[0] + 2, sticky='EW')
 
-        self.addTagButton = Tkinter.Button(self.page3, text='+ Add Tag', command=lambda : self.addTag(self.selectedTag.get()))
-        self.addTagButton.grid(column=1, row=self.tagNum + 2, sticky='EW')        
+        self.addTagButton = []
+        self.addTagButton.append(Tkinter.Button(self.page3, text='+ Add Tag', command=lambda : self.addTag(self.selectedTag[0].get(), 0)))
+        self.addTagButton[0].grid(column=1, row=self.tagNum[0] + 2, sticky='EW')        
 
+        self.editTagButton = []
+        self.editTagButton.append(Tkinter.Button(self.page3, text='Edit Tags', command=self.editTagClick, width=7))
+        self.editTagButton[0].grid(column=2, row=self.tagNum[0] + 2, sticky='W')
 
-        self.editTagButton = Tkinter.Button(self.page3, text='Edit Tags', command=self.editTagClick, width=7)
-        self.editTagButton.grid(column=2, row=self.tagNum + 2, sticky='W')
+        #FOLDER TAG EDIT
+
+        Tkinter.Label(self.page4, text='Folder Path:').grid(column=0, row=0, sticky='EW')
+
+        Tkinter.Entry(self.page4, textvariable=self.folder).grid(column=1, row=0, sticky='EW')
+       
+        Tkinter.Button(self.page4, text='Browse...', command=self.openFolderDialog, width=7).grid(column=2, row=0, sticky='W')
+        
+        Tkinter.Label(self.page4, text='Format:').grid(column=0, row=1, sticky='EW')
+        
+        Tkinter.Entry(self.page4, textvariable=self.format).grid(column=1, row=1, sticky='EW')
+        
+        self.tagNum.append(0)
+        self.metadata.append(['Title', 'Artist', 'Album', 'Album Artist', 'Genre'])
+        self.rows.append([])
+        self.selectedTag.append(Tkinter.StringVar())
+        self.selectedTag[1].set(self.metadata[1][0])
+        self.tagMenu.append(apply(Tkinter.OptionMenu, (self.page4, self.selectedTag[1]) + tuple(self.metadata[1])))
+        self.tagMenu[1].grid(column=0, row=self.tagNum[1] + 2, sticky='EW')
+
+        self.addTagButton.append(Tkinter.Button(self.page4, text='+ Add Tag', command=lambda : self.addTag(self.selectedTag[1].get(), 1)))
+        self.addTagButton[1].grid(column=1, row=self.tagNum[1] + 2, sticky='EW')        
+
+        self.editTagButton.append(Tkinter.Button(self.page4, text='Edit Tags', command=self.editTagClick, width=7))
+        self.editTagButton[1].grid(column=2, row=self.tagNum[1] + 2, sticky='W')
 
         page1.grid_rowconfigure(1, pad=5)  
         page1.grid_columnconfigure(1, weight=1, minsiz=800)
@@ -94,9 +125,17 @@ class audioGUI(Tkinter.Tk):
         self.page3.grid_rowconfigure(2, pad=5)  
         self.page3.grid_columnconfigure(1, weight=1, minsiz=800)
         self.page3.grid_columnconfigure(0, weight=1, minsiz=120)
-
+        self.page4.grid_rowconfigure(0, pad=5)  
+        self.page4.grid_rowconfigure(1, pad=5)  
+        self.page4.grid_rowconfigure(2, pad=5)  
+        self.page4.grid_columnconfigure(1, weight=1, minsiz=800)
+        self.page4.grid_columnconfigure(0, weight=1, minsiz=120)
+    
     def editTagClick(self):
-        editTag(self.file.get(), self.format.get(), self.rows)
+        editTag(self.file.get(), self.format.get(), self.rows[0])
+
+    def editTagFolderClick(self):
+        editTagFolder(self.folder.get(), self.format.get(), self.rows[1])
 
     def renameFileClick(self):
         renameFile(self.file.get(), self.format.get())
@@ -112,58 +151,59 @@ class audioGUI(Tkinter.Tk):
         foldername = tkFileDialog.askdirectory()
         self.folder.set(foldername)
 
-    def addTag(self, tag):
+    def addTag(self, tag, tab):
         group = []
-        self.metadata.remove(tag)
-        label = Tkinter.Label(self.page3, text=tag + ':', justify='left')
-        label.grid(column=0, row=self.tagNum+2, sticky='EW')
-        self.data.append(Tkinter.StringVar())
-        entry = Tkinter.Entry(self.page3, textvariable=self.data[self.tagNum])
-        entry.grid(column=1, row=self.tagNum+2, sticky='EW')
+        self.metadata[tab].remove(tag)
+        label = Tkinter.Label(self.page3 if tab == 0 else self.page4, text=tag + ':', justify='left')
+        label.grid(column=0, row=self.tagNum[tab]+2, sticky='EW')
+        data = Tkinter.StringVar()
+        entry = Tkinter.Entry(self.page3 if tab == 0 else self.page4, textvariable=data)
+        entry.grid(column=1, row=self.tagNum[tab]+2, sticky='EW')
         group.append(label)
         group.append(entry)
-        remove = Tkinter.Button(self.page3, text='Remove', width=7,command=lambda : self.removeTag(group, remove, tag))
+        remove = Tkinter.Button(self.page3 if tab == 0 else self.page4, text='Remove', width=7,command=lambda : self.removeTag(group, remove, tag, tab))
         group.append(remove)
         group.append(tag)
-        group.append(self.data[self.tagNum])
-        remove.grid(column=2, row=self.tagNum+2, sticky='W')
+        group.append(data)
+        remove.grid(column=2, row=self.tagNum[tab]+2, sticky='W')
 
-        self.rows.append(group)
+        self.rows[tab].append(group)
 
         #Shift buttons down one row
-        self.tagNum += 1
-        self.tagMenu.grid_remove()
-        self.addTagButton.grid_forget()
-        self.editTagButton.grid_forget()
-        self.editTagButton.grid(column=2, row=self.tagNum + 2, sticky='W')
-        self.page3.grid_rowconfigure(self.tagNum + 1, pad=5)  
-        if self.metadata:
-            self.selectedTag.set(self.metadata[0])
-            self.tagMenu = apply(Tkinter.OptionMenu, (self.page3, self.selectedTag) + tuple(self.metadata))
-            self.tagMenu.grid(column=0, row=self.tagNum + 2, sticky='EW')
-            self.addTagButton.grid(column=1, row=self.tagNum + 2, sticky='EW')
+        self.tagNum[tab] += 1
+        self.tagMenu[tab].grid_remove()
+        self.addTagButton[tab].grid_forget()
+        self.editTagButton[tab].grid_forget()
+        self.editTagButton[tab].grid(column=2, row=self.tagNum[tab] + 2, sticky='W')
+        self.page3.grid_rowconfigure(self.tagNum[tab] + 1, pad=5)  
+        self.page4.grid_rowconfigure(self.tagNum[tab] + 1, pad=5)  
+        if self.metadata[tab]:
+            self.selectedTag[tab].set(self.metadata[tab][0])
+            self.tagMenu[tab] = apply(Tkinter.OptionMenu, (self.page3 if tab == 0 else self.page4, self.selectedTag[tab]) + tuple(self.metadata[tab]))
+            self.tagMenu[tab].grid(column=0, row=self.tagNum[tab] + 2, sticky='EW')
+            self.addTagButton[tab].grid(column=1, row=self.tagNum[tab] + 2, sticky='EW')
 
-    def removeTag(self, group, button, tag):
+    def removeTag(self, group, button, tag, tab):
         group[0].grid_remove()
         group[1].grid_remove()
         button.grid_remove()
-        self.rows.remove(group)
-        self.metadata.append(tag)
-        self.tagNum -= 1
+        self.rows[tab].remove(group)
+        self.metadata[tab].append(tag)
+        self.tagNum[tab] -= 1
         #Shift buttons up one row
-        for i in range(len(self.rows)):
+        for i in range(len(self.rows[tab])):
             for j in range(3):
-                self.rows[i][j].grid_remove()
-                self.rows[i][j].grid(column=j, row=i + 2, sticky='EW')
-        self.tagMenu.grid_remove()
-        self.addTagButton.grid_forget()
-        self.editTagButton.grid_forget()
-        self.page3.grid_rowconfigure(self.tagNum + 1, pad=5)  
-        self.selectedTag.set(self.metadata[0])
-        self.tagMenu = apply(Tkinter.OptionMenu, (self.page3, self.selectedTag) + tuple(self.metadata))
-        self.tagMenu.grid(column=0, row=self.tagNum + 2, sticky='EW')
-        self.addTagButton.grid(column=1, row=self.tagNum + 2, sticky='EW')
-        self.editTagButton.grid(column=2, row=self.tagNum + 2, sticky='W')
+                self.rows[tab][i][j].grid_remove()
+                self.rows[tab][i][j].grid(column=j, row=i + 2, sticky='EW')
+        self.tagMenu[tab].grid_remove()
+        self.addTagButton[tab].grid_forget()
+        self.editTagButton[tab].grid_forget()
+        self.page3.grid_rowconfigure(self.tagNum[tab] + 1, pad=5)  
+        self.selectedTag[tab].set(self.metadata[tab][0])
+        self.tagMenu[tab] = apply(Tkinter.OptionMenu, (self.page3 if tab == 0 else self.page4, self.selectedTag[tab]) + tuple(self.metadata[tab]))
+        self.tagMenu[tab].grid(column=0, row=self.tagNum[tab] + 2, sticky='EW')
+        self.addTagButton[tab].grid(column=1, row=self.tagNum[tab] + 2, sticky='EW')
+        self.editTagButton[tab].grid(column=2, row=self.tagNum[tab] + 2, sticky='W')
 
 
 
