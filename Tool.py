@@ -1,5 +1,12 @@
 import mutagen
+from mutagen.easyid3 import EasyID3
 import os
+
+#check if %[char] exists
+formats = {'a':'Artist', 't':'Title', 'b':'Album', 'c':'Album Artist', 'n':'Track Number', 'g':'Genre'}
+mp3formats = {'a':'TPE1', 't':'TIT2', 'b':'TALB', 'c':'TPE2', 'n':'TRCK', 'g':'TCON'}
+aifformats = mp3formats
+oggformats = {'a':'ARTIST', 't':'TITLE', 'b':'ALBUM'}
 
 def renameFile(filePath, fileFormat):
     
@@ -10,11 +17,7 @@ def renameFile(filePath, fileFormat):
         if fileFormat[i:i+1] == '%':
             subs.append(fileFormat[i+1:i+2])        
 
-    #check if %[char] exists
-    formats = {'a':'Artist', 't':'Title', 'b':'Album', 'c':'Album Artist', 'n':'Track Number', 'y':'Year', 'g':'Genre'}
-    mp3formats = {'a':'TPE1', 't':'TIT2', 'b':'TALB', 'c':'TPE2', 'n':'TRCK', 'y': 'TYER', 'g':'TCON'}
-    aifformats = mp3formats
-    oggformats = {'a':'ARTIST', 't':'TITLE', 'b':'ALBUM'}
+
 
     for sub in subs:
         if sub not in formats:
@@ -66,3 +69,31 @@ def renameFolder(folderPath, fileFormat):
 
     for file in os.listdir(folderPath):
         renameFile(os.path.join(folderPath, file), fileFormat)
+
+def editTag(filePath, fileFormat, rows):
+    
+    ext = os.path.splitext(filePath)[1]
+    if ext == '.mp3' or ext == '.aif' or ext == '.wav':
+        audio = EasyID3(filePath)
+    elif ext == '.ogg': 
+        audio = mutagen.File(filePath)
+    else:
+        print('Audio Format ' + ext + ' is currently unsupported :(')
+
+    #look through format to check for %'s
+    subs = []
+    for i in range(len(fileFormat)-1):
+        if fileFormat[i:i+1] == '%':
+            subs.append(fileFormat[i+1:i+2])        
+
+    for sub in subs:
+        if sub not in formats:
+            print('ERROR: %' + sub + ' is not recognized.')
+            return;
+
+    for row in rows:
+        audio[row[3].replace(' ', '')] = row[4].get()
+        #for code, f in formats.iteritems():
+    
+    print(audio.pprint())
+    audio.save()
