@@ -149,4 +149,28 @@ def editTag(filePath, fileFormat, rows):
 def editTagFolder(folderPath, fileFormat, rows):
 
     for file in os.listdir(folderPath):
-        editTag(os.path.join(folderPath, file), fileFormat)
+        editTag(os.path.join(folderPath, file), fileFormat, rows)
+
+def cleanFile(filePath):
+
+    path, fileName = os.path.split(filePath)
+    
+    i = 0
+    newName = ''
+    while i < len(fileName):
+        if fileName[i:i+1] == '_':
+            newName += ' '
+        elif fileName[i:i+3] == '%20':
+            newName += ' '
+            i += 2
+        else:
+            newName += fileName[i:i+1]
+        i += 1
+
+    print('\"' + fileName + '\"' + ' being renamed to \"' + newName + '\"')
+    
+    os.rename(filePath, os.path.join(path, newName))
+
+def cleanFolder(folderPath):
+    for file in os.listdir(folderPath):
+        cleanFile(os.path.join(folderPath, file))   

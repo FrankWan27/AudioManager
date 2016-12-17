@@ -17,10 +17,13 @@ class audioGUI(Tkinter.Tk):
         page2 = ttk.Frame(nb)
         self.page3 = ttk.Frame(nb)
         self.page4 = ttk.Frame(nb)
+        page5 = ttk.Frame(nb)
         nb.add(page1, text='File Rename')
         nb.add(page2, text='Folder Rename')
         nb.add(self.page3, text='File Tag Edit')
         nb.add(self.page4, text='Folder Tag Edit')
+        nb.add(page5, text='Clean Filename')
+
         nb.grid(column=0, row=0, stick='EW')
         
         #Variables to store
@@ -33,7 +36,7 @@ class audioGUI(Tkinter.Tk):
         Tkinter.Label(page1, text='File Path:').grid(column=0, row=0, sticky='EW')
 
         Tkinter.Entry(page1, textvariable=self.file).grid(column=1, row=0, sticky='EW')
-       
+
         Tkinter.Button(page1, text='Browse...', command=self.openFileDialog, width=7).grid(column=2, row=0, sticky='W')
         
         Tkinter.Label(page1, text='Format:').grid(column=0, row=1, sticky='EW')
@@ -67,24 +70,28 @@ class audioGUI(Tkinter.Tk):
         
         Tkinter.Entry(self.page3, textvariable=self.format).grid(column=1, row=1, sticky='EW')
 
+        Tkinter.Button(self.page3, text='Clear', command=lambda : self.format.set(''), width=7).grid(column=2, row=1, sticky='W')
+        
         self.tagNum = []
         self.metadata = []
         self.rows = []
+        self.clearFormatButton = []
+        self.selectedTag = []
+        self.addTagButton = []
+        self.editTagButton = []
+
         self.tagNum.append(0)
         self.metadata.append(['Title', 'Artist', 'Album', 'Album Artist', 'Genre'])
         self.rows.append([])
-        self.selectedTag = []
         self.selectedTag.append(Tkinter.StringVar())
         self.selectedTag[0].set(self.metadata[0][0])
         self.tagMenu = []
         self.tagMenu.append(apply(Tkinter.OptionMenu, (self.page3, self.selectedTag[0]) + tuple(self.metadata[0])))
         self.tagMenu[0].grid(column=0, row=self.tagNum[0] + 2, sticky='EW')
 
-        self.addTagButton = []
         self.addTagButton.append(Tkinter.Button(self.page3, text='+ Add Tag', command=lambda : self.addTag(self.selectedTag[0].get(), 0)))
         self.addTagButton[0].grid(column=1, row=self.tagNum[0] + 2, sticky='EW')        
 
-        self.editTagButton = []
         self.editTagButton.append(Tkinter.Button(self.page3, text='Edit Tags', command=self.editTagClick, width=7))
         self.editTagButton[0].grid(column=2, row=self.tagNum[0] + 2, sticky='W')
 
@@ -99,7 +106,9 @@ class audioGUI(Tkinter.Tk):
         Tkinter.Label(self.page4, text='Format:').grid(column=0, row=1, sticky='EW')
         
         Tkinter.Entry(self.page4, textvariable=self.format).grid(column=1, row=1, sticky='EW')
-        
+                
+        Tkinter.Button(self.page4, text='Clear', command=lambda : self.format.set(''), width=7).grid(column=2, row=1, sticky='W')
+
         self.tagNum.append(0)
         self.metadata.append(['Title', 'Artist', 'Album', 'Album Artist', 'Genre'])
         self.rows.append([])
@@ -111,12 +120,33 @@ class audioGUI(Tkinter.Tk):
         self.addTagButton.append(Tkinter.Button(self.page4, text='+ Add Tag', command=lambda : self.addTag(self.selectedTag[1].get(), 1)))
         self.addTagButton[1].grid(column=1, row=self.tagNum[1] + 2, sticky='EW')        
 
-        self.editTagButton.append(Tkinter.Button(self.page4, text='Edit Tags', command=self.editTagClick, width=7))
+        self.editTagButton.append(Tkinter.Button(self.page4, text='Edit Tags', command=self.editTagFolderClick, width=7))
         self.editTagButton[1].grid(column=2, row=self.tagNum[1] + 2, sticky='W')
 
+        #CLEAN FILE NAME
+        Tkinter.Label(page5, text='File Path:').grid(column=0, row=0, sticky='EW')
+
+        Tkinter.Entry(page5, textvariable=self.file).grid(column=1, row=0, sticky='EW')
+       
+        Tkinter.Button(page5, text='Browse...', command=self.openFileDialog, width=7).grid(column=2, row=0, sticky='W')
+
+        Tkinter.Button(page5, text='Clean', command=self.cleanFileClick, width=7).grid(column=3, row=0, sticky='W')
+
+        Tkinter.Label(page5, text='Folder Path:').grid(column=0, row=1, sticky='EW')
+
+        Tkinter.Entry(page5, textvariable=self.folder).grid(column=1, row=1, sticky='EW')
+       
+        Tkinter.Button(page5, text='Browse...', command=self.openFolderDialog, width=7).grid(column=2, row=1, sticky='W')
+
+        Tkinter.Button(page5, text='Clean', command=self.cleanFolderClick, width=7).grid(column=3, row=1, sticky='W')
+
+
+
+        page1.grid_rowconfigure(0, pad=5)
         page1.grid_rowconfigure(1, pad=5)  
         page1.grid_columnconfigure(1, weight=1, minsiz=800)
         page1.grid_columnconfigure(0, weight=1, minsiz=120)
+        page2.grid_rowconfigure(0, pad=5)
         page2.grid_rowconfigure(1, pad=5)  
         page2.grid_columnconfigure(1, weight=1, minsiz=800)
         page2.grid_columnconfigure(0, weight=1, minsiz=120)
@@ -130,7 +160,17 @@ class audioGUI(Tkinter.Tk):
         self.page4.grid_rowconfigure(2, pad=5)  
         self.page4.grid_columnconfigure(1, weight=1, minsiz=800)
         self.page4.grid_columnconfigure(0, weight=1, minsiz=120)
+        page5.grid_rowconfigure(0, pad=5)  
+        page5.grid_rowconfigure(1, pad=5)  
+        page5.grid_columnconfigure(1, weight=1, minsiz=715)
+        page5.grid_columnconfigure(0, weight=1, minsiz=120)
     
+    def cleanFileClick(self):
+        cleanFile(self.file.get())
+
+    def cleanFolderClick(self):
+        cleanFolder(self.folder.get())
+
     def editTagClick(self):
         editTag(self.file.get(), self.format.get(), self.rows[0])
 
