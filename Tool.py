@@ -81,12 +81,59 @@ def editTag(filePath, fileFormat, rows):
         print('Audio Format ' + ext + ' is currently unsupported :(')
         return
 
-    #look through format to check for %'s
+    formatList = []
+
+    i = 0
+    string = ''
+    while i < len(fileFormat):
+        if fileFormat[i:i+1] == '%':
+            if string != '':
+                formatList.append(string)
+                string = ''
+            formatList.append(fileFormat[i:i+2])  
+            i += 1
+        else:
+            string += fileFormat[i:i+1]           
+        i += 1
+    
+    fileName = os.path.split(filePath)[1][0:-4]
+
+    i = 0 
+    for s in range(len(formatList)):
+        if formatList[s][0] != '%':
+            for c in formatList[s]:
+                if c == fileName[i]:
+                    i += 1
+                else:
+                    print('Audio Format does not match File Name at index ' + i + '.')
+                    return
+        else:
+            tag = ''                
+            tagLength = 0
+
+            if s < len(formatList) - 1:
+                nextWord = formatList[s + 1]
+                while(fileName[i+tagLength:i+tagLength+len(nextWord)] != nextWord):
+                    if i + tagLength + len(nextWord) > len(fileName):
+                        print('Audio Format does not match File Name at index a lot' )
+                        return
+                    else:
+                        tagLength += 1
+                tag = fileName[i:i+tagLength]
+            else:
+                tag = fileName[i:len(fileName)]
+
+            audio[formats[formatList[s][1]].replace(' ','')] = tag
+            i += tagLength
+
+
+
+
+
     subs = []
     for i in range(len(fileFormat)-1):
         if fileFormat[i:i+1] == '%':
-            subs.append(fileFormat[i+1:i+2])        
-
+            subs.append(fileFormat[i+1:i+2])  
     for sub in subs:
         if sub not in formats:
             print('ERROR: %' + sub + ' is not recognized.')
